@@ -25,9 +25,9 @@ public class AppEntry(SourceContext sourceContext, DatabaseContext destContext)
 
     public async Task Run()
     {
-        AnsiConsole.MarkupLine($"[[[aqua]{DateTimeOffset.UtcNow:HH:mm:ss.fff}[/]]] [yellow]Starting migration[/]");
+        AnsiConsole.MarkupLine($"[[[aqua]{DateTimeOffset.UtcNow:HH:mm:ss.fff}[/]]] [yellow]Applying migrations...[/]");
         await destContext.Database.MigrateAsync();
-        AnsiConsole.MarkupLine($"[[[aqua]{DateTimeOffset.UtcNow:HH:mm:ss.fff}[/]]] [green]Migrated[/]");
+        AnsiConsole.MarkupLine($"[[[aqua]{DateTimeOffset.UtcNow:HH:mm:ss.fff}[/]]] [green]Migrations applied[/]");
 
         await IW4MAdminSeedAsync();
         AnsiConsole.MarkupLine($"[[[aqua]{DateTimeOffset.UtcNow:HH:mm:ss.fff}[/]]] [green]Added IW4MAdmin seed[/]");
@@ -105,7 +105,7 @@ public class AppEntry(SourceContext sourceContext, DatabaseContext destContext)
                 TotalConnectionTime = 0,
                 FirstConnection = dateTimeAdded,
                 LastConnection = DateTimeOffset.FromUnixTimeSeconds(client.TimeEdit).DateTime,
-                GameName = Reference.Game.UKN,
+                GameName = Reference.Game.IW3,
                 AliasLink = aliasLink,
                 Level = EFClient.Permission.User,
                 CurrentAlias = new EFAlias
@@ -113,7 +113,7 @@ public class AppEntry(SourceContext sourceContext, DatabaseContext destContext)
                     Link = aliasLink,
                     Name = name,
                     SearchableName = name.ToLower(),
-                    IPAddress = client.Ip.ConvertToIP(),
+                    IPAddress = client.Ip.ConvertToIp(),
                     DateAdded = dateTimeAdded
                 }
             };

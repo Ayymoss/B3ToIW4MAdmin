@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using B3ToIW4MAdmin.Context;
+﻿using B3ToIW4MAdmin.Context;
 using B3ToIW4MAdmin.Utilities;
 using Data.Context;
 using Data.MigrationContext;
@@ -26,7 +25,7 @@ public static class Program
                 .Options;
 
             var serviceCollection = new ServiceCollection()
-                .AddSingleton((DatabaseContext)new MySqlDatabaseContext(mySqlOptions))
+                .AddSingleton<DatabaseContext>(new MySqlDatabaseContext(mySqlOptions))
                 .AddSingleton(configuration)
                 .AddSingleton<AppEntry>();
 
@@ -42,8 +41,8 @@ public static class Program
         }
         catch (Exception e)
         {
-            AnsiConsole.MarkupLine($"[[[aqua]{DateTimeOffset.UtcNow:HH:mm:ss.fff}[/]]] [red]Exception: {e}[/]\n");
-            AnsiConsole.MarkupLine($"[[[aqua]{DateTimeOffset.UtcNow:HH:mm:ss.fff}[/]]] [red]Migration failed![/]\n");
+            Console.WriteLine($"Error: {e}");
+            Console.WriteLine("Migration failed. Press any key to exit.");
         }
 
         AnsiConsole.MarkupLine("[italic red]Press any key to exit.[/]");

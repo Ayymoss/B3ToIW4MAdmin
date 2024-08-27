@@ -2,6 +2,6 @@
 
 public class Configuration
 {
-    public string SourceConnectionString { get; set; }
-    public string DestinationConnectionString { get; set; }
+    public required string SourceConnectionString { get; set; }
+    public required string DestinationConnectionString { get; set; }
 }
