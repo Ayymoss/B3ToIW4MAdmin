@@ -95,7 +95,7 @@ public class AppEntry(SourceContext sourceContext, DatabaseContext destContext)
             if (!ulong.TryParse(client.Guid!, out var ulongGuid)) return;
 
             var aliasLink = new EFAliasLink();
-            var dateTimeAdded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(client.TimeAdd)).DateTime;
+            var dateTimeAdded = DateTimeOffset.FromUnixTimeSeconds(client.TimeAdd).DateTime;
             var name = client.Name.CapClientName(24);
 
             var newClient = new EFClient

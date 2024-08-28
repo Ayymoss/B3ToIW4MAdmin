@@ -7,6 +7,6 @@ public class Client
     public long Connections { get; set; }
     public string? Guid { get; set; }
     public string Name { get; set; } = null!;
-    public string TimeAdd { get; set; } = null!;
+    public long TimeAdd { get; set; }
     public long TimeEdit { get; set; }
 }

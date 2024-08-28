@@ -19,32 +19,38 @@ public class SourceContext : DbContext
             entity.ToTable("clients");
 
             entity.Property(e => e.Id)
-                .HasColumnType("integer")
+                .HasColumnType("int(11) unsigned") // Updated type
                 .HasColumnName("id");
 
             entity.Property(e => e.Connections)
-                .HasColumnType("integer")
-                .HasColumnName("connections");
+                .HasColumnType("int(11) unsigned") // Updated type
+                .HasColumnName("connections")
+                .HasDefaultValueSql("'0'");
 
             entity.Property(e => e.Guid)
-                .HasColumnType("varchar(20)")
-                .HasColumnName("guid");
+                .HasColumnType("varchar(36)") // Updated size
+                .HasColumnName("guid")
+                .HasDefaultValueSql("''"); // Added default value
 
             entity.Property(e => e.Ip)
                 .HasColumnType("varchar(16)")
-                .HasColumnName("ip");
+                .HasColumnName("ip")
+                .HasDefaultValueSql("''");
 
             entity.Property(e => e.Name)
                 .HasColumnType("varchar(32)")
-                .HasColumnName("name");
+                .HasColumnName("name")
+                .HasDefaultValueSql("''");
 
             entity.Property(e => e.TimeAdd)
-                .HasColumnType("varchar(11)")
-                .HasColumnName("time_add");
+                .HasColumnType("int(11) unsigned") // Updated type
+                .HasColumnName("time_add")
+                .HasDefaultValueSql("'0'"); // Updated default value
 
             entity.Property(e => e.TimeEdit)
-                .HasColumnType("integer")
-                .HasColumnName("time_edit");
+                .HasColumnType("int(11) unsigned") // Updated type
+                .HasColumnName("time_edit")
+                .HasDefaultValueSql("'0'");
         });
 
         modelBuilder.Entity<Penalty>(entity =>
@@ -52,32 +58,38 @@ public class SourceContext : DbContext
             entity.ToTable("penalties");
 
             entity.Property(e => e.Id)
-                .HasColumnType("integer")
+                .HasColumnType("int(10) unsigned") // Updated type
                 .HasColumnName("id");
 
             entity.Property(e => e.Type)
-                .HasColumnType("text")
-                .HasColumnName("type");
+                .HasColumnType("text") // Updated type
+                .HasColumnName("type")
+                .HasDefaultValueSql("'Ban'");
 
             entity.Property(e => e.ClientId)
-                .HasColumnType("integer")
-                .HasColumnName("client_id");
+                .HasColumnType("int(10) unsigned") // Updated type
+                .HasColumnName("client_id")
+                .HasDefaultValueSql("'0'");
 
             entity.Property(e => e.AdminId)
-                .HasColumnType("integer")
-                .HasColumnName("admin_id");
+                .HasColumnType("int(10) unsigned") // Updated type
+                .HasColumnName("admin_id")
+                .HasDefaultValueSql("'0'");
 
             entity.Property(e => e.Reason)
                 .HasColumnType("varchar(255)")
-                .HasColumnName("reason");
+                .HasColumnName("reason")
+                .HasDefaultValueSql("''");
 
             entity.Property(e => e.TimeAdd)
-                .HasColumnType("integer")
-                .HasColumnName("time_add");
+                .HasColumnType("int(11) unsigned") // Updated type
+                .HasColumnName("time_add")
+                .HasDefaultValueSql("'0'");
 
             entity.Property(e => e.TimeExpire)
-                .HasColumnType("integer")
-                .HasColumnName("time_expire");
+                .HasColumnType("int(11)") // Updated type (removed unsigned)
+                .HasColumnName("time_expire")
+                .HasDefaultValueSql("'0'");
         });
 
         base.OnModelCreating(modelBuilder);
