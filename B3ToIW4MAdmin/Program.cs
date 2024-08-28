@@ -14,30 +14,45 @@ public static class Program
     {
         try
         {
+            AnsiConsole.MarkupLine("[italic gray]Loading config...[/]");
+
             var configurationSetup = new ConfigurationSetup();
             var configuration = configurationSetup.GetConfiguration();
             if (configuration is null) throw new Exception("Failed to load configuration. Delete the configuration and run this again");
 
-            var mySqlOptions = new DbContextOptionsBuilder<MySqlDatabaseContext>()
-                .UseMySql(configuration.DestinationConnectionString, ServerVersion.AutoDetect(configuration.DestinationConnectionString))
+            AnsiConsole.MarkupLine("[italic gray]Setting PostgreSQL DB Context Options...[/]");
+
+            var postgresTargetOptions = new DbContextOptionsBuilder<PostgresqlDatabaseContext>()
+                .UseNpgsql(configuration.DestinationConnectionString)
                 .EnableDetailedErrors()
                 .EnableSensitiveDataLogging()
                 .Options;
 
+            AnsiConsole.MarkupLine("[italic gray]Setting MySQL DB Context Options...[/]");
+
+            var mySqlTargetOptions = new DbContextOptionsBuilder<SourceContext>()
+                .UseMySql(configuration.SourceConnectionString, ServerVersion.AutoDetect(configuration.SourceConnectionString))
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging()
+                .Options;
+
+            AnsiConsole.MarkupLine("[italic gray]Building Service Collection...[/]");
+
             var serviceCollection = new ServiceCollection()
-                .AddSingleton<DatabaseContext>(new MySqlDatabaseContext(mySqlOptions))
+                .AddSingleton<DatabaseContext>(new PostgresqlDatabaseContext(postgresTargetOptions))
+                .AddSingleton(new SourceContext(mySqlTargetOptions))
                 .AddSingleton(configuration)
                 .AddSingleton<AppEntry>();
 
-            serviceCollection.AddDbContext<SourceContext>(o =>
-            {
-                o.UseMySql(configuration.SourceConnectionString, ServerVersion.AutoDetect(configuration.SourceConnectionString));
-                o.EnableSensitiveDataLogging();
-            });
+            AnsiConsole.MarkupLine("[italic gray]Building Service Provider...[/]");
 
-            await serviceCollection
+            var serviceProvider = serviceCollection
                 .BuildServiceProvider()
-                .GetRequiredService<AppEntry>().Run();
+                .GetRequiredService<AppEntry>();
+
+            AnsiConsole.MarkupLine("[italic gray]Starting...[/]");
+
+            await serviceProvider.Run();
         }
         catch (Exception e)
         {
