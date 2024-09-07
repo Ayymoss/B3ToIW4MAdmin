@@ -61,20 +61,24 @@ public class AppEntry(SourceContext sourceContext, DatabaseContext destContext)
 
             var dateTimeAdded = DateTimeOffset.FromUnixTimeSeconds(penalty.TimeAdd).DateTime;
 
-            var expires = penalty.TimeExpire.Equals(-1)
+            var expires = penalty.TimeExpire is -1
                 ? (DateTime?)null
                 : DateTimeOffset.FromUnixTimeSeconds(penalty.TimeExpire).DateTime;
 
+            var type = PenaltyArray[penalty.Type];
+            var active = !(penalty.Inactive is 1 && type is EFPenalty.PenaltyType.TempBan or EFPenalty.PenaltyType.Ban);
+
             var newPenalty = new EFPenalty
             {
+                Active = active,
                 Link = offender.AliasLink,
                 Offender = offender,
                 Punisher = penalty.AdminId is 0 ? null : punisher,
                 PunisherId = penalty.AdminId is 0 ? 1 : 0,
                 When = dateTimeAdded,
-                Expires = penalty.TimeExpire.Equals(0) ? dateTimeAdded : expires,
+                Expires = penalty.TimeExpire is 0 ? dateTimeAdded : expires,
                 Offense = penalty.Reason,
-                Type = PenaltyArray[penalty.Type],
+                Type = type,
             };
 
             _penalties.Add(newPenalty);

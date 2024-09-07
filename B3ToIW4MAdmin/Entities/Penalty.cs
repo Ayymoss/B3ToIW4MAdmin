@@ -6,6 +6,7 @@ public class Penalty
     public string Type { get; set; } = null!;
     public long ClientId { get; set; }
     public long AdminId { get; set; }
+    public byte Inactive { get; set; }
     public string Reason { get; set; } = null!;
     public long TimeAdd { get; set; }
     public long TimeExpire { get; set; }
